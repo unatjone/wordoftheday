@@ -333,6 +333,16 @@ function createAudioButtonLabel(word) {
   return `Hear ${word} pronounced`;
 }
 
+function getPreferredVoice() {
+  const voices = window.speechSynthesis.getVoices();
+
+  return voices.find((voice) => voice.lang === 'en-ZA')
+    || voices.find((voice) => voice.lang === 'en-GB')
+    || voices.find((voice) => voice.lang === 'en-US')
+    || voices.find((voice) => voice.lang.startsWith('en'))
+    || null;
+}
+
 function speakDailyWord() {
   if (!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance === 'undefined') {
     return;
@@ -340,10 +350,15 @@ function speakDailyWord() {
 
   const wordData = pickDailyWord();
   const utterance = new SpeechSynthesisUtterance(wordData.word);
+  const voice = getPreferredVoice();
 
-  utterance.lang = 'en-ZA';
+  utterance.lang = voice ? voice.lang : 'en';
   utterance.rate = 0.82;
   utterance.pitch = 1.12;
+
+  if (voice) {
+    utterance.voice = voice;
+  }
 
   window.speechSynthesis.cancel();
   window.speechSynthesis.speak(utterance);
@@ -479,6 +494,10 @@ window.addEventListener('DOMContentLoaded', () => {
   const heroScene = document.querySelector('.hero-scene');
 
   updateActivityStrip({ reveal: false });
+
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.getVoices();
+  }
 
   document.addEventListener('click', (event) => {
     if (event.target.closest('.audio-button')) {
