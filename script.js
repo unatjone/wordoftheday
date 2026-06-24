@@ -252,9 +252,9 @@ const wordActivities = Object.fromEntries([
 
 const bubbleSteps = [
   { className: 'thought-dot-one', delay: 0 },
-  { className: 'thought-dot-two', delay: 500 },
-  { className: 'thought-dot-three', delay: 1000 },
-  { className: 'thought-main', delay: 1500, isMain: true }
+  { className: 'thought-dot-two', delay: 400 },
+  { className: 'thought-dot-three', delay: 700 },
+  { className: 'thought-main', delay: 900, isMain: true }
 ];
 
 let bubbleTimers = [];
