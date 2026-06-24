@@ -260,7 +260,7 @@ const bubbleSteps = [
 let bubbleTimers = [];
 let activityRevealTimer;
 const wordRolloverHourUtc = 2;
-const activityRevealDelayAfterMainBubble = 5000;
+const activityRevealDelayAfterMainBubble = 0;
 const minimumRepeatGapDays = 50;
 const wordOrder = createShuffledWordOrder(Object.keys(wordActivities), 7282026);
 
