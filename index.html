@@ -3,15 +3,46 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Word of the Day</title>
+  <title>Word of the Day for Kids | Fun Vocabulary Activity</title>
+  <meta name="description" content="A playful daily vocabulary word for kids with pronunciation, meaning, sentence practice, and a drawing activity." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://fun-word.co.za/" />
+  <meta name="theme-color" content="#59cad8" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Word of the Day for Kids" />
+  <meta property="og:description" content="Discover a fun daily word with pronunciation, meaning, sentence practice, and a drawing activity for kids." />
+  <meta property="og:url" content="https://fun-word.co.za/" />
+  <meta property="og:image" content="https://fun-word.co.za/word-of-the-day-kids-hero.webp" />
+  <meta property="og:image:alt" content="Word of the Day scene with a smiling child and storybook friends" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Word of the Day for Kids" />
+  <meta name="twitter:description" content="A playful daily vocabulary activity for young learners." />
+  <meta name="twitter:image" content="https://fun-word.co.za/word-of-the-day-kids-hero.webp" />
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LearningResource",
+      "name": "Word of the Day for Kids",
+      "description": "A playful daily vocabulary activity for children with pronunciation, meaning, sentence practice, and drawing prompts.",
+      "url": "https://fun-word.co.za/",
+      "image": "https://fun-word.co.za/word-of-the-day-kids-hero.webp",
+      "learningResourceType": "Vocabulary activity",
+      "educationalLevel": "Preschool, Early elementary",
+      "audience": {
+        "@type": "EducationalAudience",
+        "educationalRole": "student"
+      },
+      "inLanguage": "en"
+    }
+  </script>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <main class="page-shell" aria-label="Word of the Day">
     <section class="hero-scene" aria-label="Create your Word of the Day story">
-      <img class="hero-image" src="boy.webp" alt="Boy in red glasses with storybook friends" />
+      <img class="hero-image" src="word-of-the-day-kids-hero.webp" alt="Boy in red glasses with storybook friends" />
 
-      <img class="brand-logo" src="logo.webp" alt="Word of the Day" />
+      <img class="brand-logo" src="word-of-the-day-logo.webp" alt="Word of the Day" />
       <button class="word-prompt" type="button" aria-label="Show today's word">
         Tap for today's word
       </button>
@@ -28,6 +59,10 @@
           <span class="sound sound-two"></span>
         </div>
         <h2>Say it</h2>
+        <button class="audio-button activity-audio" type="button" aria-label="Hear today's word pronounced">
+          <span class="audio-cone" aria-hidden="true"></span>
+          <span class="audio-wave" aria-hidden="true"></span>
+        </button>
         <p id="sayActivity">ma-gic</p>
       </article>
 

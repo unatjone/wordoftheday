@@ -329,6 +329,26 @@ function setWordPromptVisible(isVisible) {
   }
 }
 
+function createAudioButtonLabel(word) {
+  return `Hear ${word} pronounced`;
+}
+
+function speakDailyWord() {
+  if (!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance === 'undefined') {
+    return;
+  }
+
+  const wordData = pickDailyWord();
+  const utterance = new SpeechSynthesisUtterance(wordData.word);
+
+  utterance.lang = 'en-ZA';
+  utterance.rate = 0.82;
+  utterance.pitch = 1.12;
+
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utterance);
+}
+
 function clearThoughtBubbles(layer) {
   bubbleTimers.forEach((timer) => clearTimeout(timer));
   bubbleTimers = [];
@@ -347,7 +367,13 @@ function createBubble(step, wordData) {
     bubble.innerHTML = `
       <div class="thought-content">
         <p class="thought-label">Word of the day</p>
-        <h1 class="thought-word">${wordData.word}</h1>
+        <div class="word-row">
+          <h1 class="thought-word">${wordData.word}</h1>
+          <button class="audio-button word-audio" type="button" aria-label="${createAudioButtonLabel(wordData.word)}">
+            <span class="audio-cone" aria-hidden="true"></span>
+            <span class="audio-wave" aria-hidden="true"></span>
+          </button>
+        </div>
         <p class="thought-description">${wordData.description}</p>
       </div>
     `;
@@ -368,6 +394,7 @@ function updateVisibleWord() {
   const wordData = pickDailyWord();
   content.querySelector('.thought-word').textContent = wordData.word;
   content.querySelector('.thought-description').textContent = wordData.description;
+  content.querySelector('.word-audio')?.setAttribute('aria-label', createAudioButtonLabel(wordData.word));
 }
 
 function getActivityElements() {
@@ -405,6 +432,7 @@ function updateActivityStrip({ reveal = false } = {}) {
   activityElements.use.textContent = wordData.use;
   activityElements.try.textContent = wordData.try;
   activityElements.draw.textContent = wordData.draw;
+  document.querySelector('.activity-audio')?.setAttribute('aria-label', createAudioButtonLabel(wordData.word));
 
   if (activityElements.steps) {
     activityElements.steps.classList.toggle('activities-visible', reveal);
@@ -452,8 +480,21 @@ window.addEventListener('DOMContentLoaded', () => {
 
   updateActivityStrip({ reveal: false });
 
+  document.addEventListener('click', (event) => {
+    if (event.target.closest('.audio-button')) {
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+      speakDailyWord();
+    }
+  }, true);
+
   if (heroScene) {
-    heroScene.addEventListener('click', showThoughtSequence);
+    heroScene.addEventListener('click', (event) => {
+      if (!event.target.closest('.audio-button')) {
+        showThoughtSequence();
+      }
+    });
   }
 
   scheduleDailyWordRefresh();
