@@ -321,11 +321,21 @@ function getMsUntilNextWordRollover() {
   return nextRollover.getTime() - now.getTime();
 }
 
+function setWordPromptVisible(isVisible) {
+  const prompt = document.querySelector('.word-prompt');
+
+  if (prompt) {
+    prompt.hidden = !isVisible;
+  }
+}
+
 function clearThoughtBubbles(layer) {
   bubbleTimers.forEach((timer) => clearTimeout(timer));
   bubbleTimers = [];
   clearTimeout(activityRevealTimer);
   hideActivityStrip();
+  layer.closest('.hero-scene')?.classList.remove('word-active');
+  setWordPromptVisible(true);
   layer.replaceChildren();
 }
 
@@ -410,6 +420,8 @@ function showThoughtSequence() {
 
   const wordData = pickDailyWord();
   clearThoughtBubbles(layer);
+  layer.closest('.hero-scene')?.classList.add('word-active');
+  setWordPromptVisible(false);
   updateActivityStrip({ reveal: false });
 
   bubbleSteps.forEach((step) => {
@@ -436,7 +448,13 @@ function scheduleDailyWordRefresh() {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
+  const heroScene = document.querySelector('.hero-scene');
+
   updateActivityStrip({ reveal: false });
-  document.addEventListener('click', showThoughtSequence);
+
+  if (heroScene) {
+    heroScene.addEventListener('click', showThoughtSequence);
+  }
+
   scheduleDailyWordRefresh();
 });
