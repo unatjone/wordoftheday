@@ -385,8 +385,11 @@ function createBubble(step, wordData) {
         <div class="word-row">
           <h1 class="thought-word">${wordData.word}</h1>
           <button class="audio-button word-audio" type="button" aria-label="${createAudioButtonLabel(wordData.word)}">
-            <span class="audio-cone" aria-hidden="true"></span>
-            <span class="audio-wave" aria-hidden="true"></span>
+            <svg class="audio-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path class="audio-speaker" d="M4 9v6h4l5 4V5L8 9H4z" />
+              <path class="audio-wave wave-one" d="M16 9.5c.8.7 1.2 1.5 1.2 2.5s-.4 1.8-1.2 2.5" />
+              <path class="audio-wave wave-two" d="M18.4 7.2c1.4 1.3 2.1 2.9 2.1 4.8s-.7 3.5-2.1 4.8" />
+            </svg>
           </button>
         </div>
         <p class="thought-description">${wordData.description}</p>
