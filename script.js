@@ -259,8 +259,12 @@ const bubbleSteps = [
 
 let bubbleTimers = [];
 let activityRevealTimer;
+let drawPromptTimer;
+let wordPromptHideTimer;
 const wordRolloverHourUtc = 2;
 const activityRevealDelayAfterMainBubble = 0;
+const wordPromptHideDelay = 10000;
+const drawPromptDelay = 30000;
 const minimumRepeatGapDays = 50;
 const wordOrder = createShuffledWordOrder(Object.keys(wordActivities), 7282026);
 const drawingState = {
@@ -335,6 +339,14 @@ function setWordPromptVisible(isVisible) {
   if (prompt) {
     prompt.hidden = !isVisible;
   }
+}
+
+function scheduleWordPromptHide() {
+  clearTimeout(wordPromptHideTimer);
+
+  wordPromptHideTimer = setTimeout(() => {
+    setWordPromptVisible(false);
+  }, wordPromptHideDelay);
 }
 
 function createAudioButtonLabel(word) {
@@ -476,8 +488,29 @@ function getDrawingElements() {
     brush: document.getElementById('brushSize'),
     undo: document.querySelector('.drawing-undo'),
     clear: document.querySelector('.drawing-clear'),
-    open: document.querySelector('.draw-card-button')
+    open: document.querySelector('.draw-card-button'),
+    prompt: document.querySelector('.draw-tap-prompt')
   };
+}
+
+function setDrawPromptVisible(isVisible) {
+  const { prompt } = getDrawingElements();
+
+  if (prompt) {
+    prompt.hidden = !isVisible;
+  }
+}
+
+function scheduleDrawPrompt() {
+  clearTimeout(drawPromptTimer);
+
+  drawPromptTimer = setTimeout(() => {
+    const { screen } = getDrawingElements();
+
+    if (!screen || screen.hidden) {
+      setDrawPromptVisible(true);
+    }
+  }, drawPromptDelay);
 }
 
 function prepareDrawingContext(context) {
@@ -678,6 +711,8 @@ function openDrawingScreen() {
     return;
   }
 
+  clearTimeout(drawPromptTimer);
+  setDrawPromptVisible(false);
   updateDrawingWord();
   screen.hidden = false;
   document.body.classList.add('drawing-open');
@@ -757,6 +792,7 @@ function setupDrawingBoard() {
   });
 
   updateDrawingWord();
+  scheduleDrawPrompt();
 
   if (undo) {
     undo.disabled = true;
@@ -771,6 +807,7 @@ function showThoughtSequence() {
   }
 
   const wordData = pickDailyWord();
+  clearTimeout(wordPromptHideTimer);
   clearThoughtBubbles(layer);
   layer.closest('.hero-scene')?.classList.add('word-active');
   setWordPromptVisible(false);
@@ -803,6 +840,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const heroScene = document.querySelector('.hero-scene');
 
   updateActivityStrip({ reveal: false });
+  scheduleWordPromptHide();
 
   if ('speechSynthesis' in window) {
     window.speechSynthesis.getVoices();
