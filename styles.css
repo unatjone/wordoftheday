@@ -405,6 +405,48 @@ body {
   text-transform: uppercase;
 }
 
+.draw-card-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+
+.draw-card-button:focus-visible {
+  outline: 3px solid #246aa8;
+  outline-offset: 8px;
+  border-radius: 12px;
+}
+
+.draw-card-button:hover .draw-icon {
+  transform: translateY(-2px) rotate(-2deg);
+}
+
+.draw-card-button:active .draw-icon {
+  transform: translateY(1px);
+}
+
+.draw-card-button .draw-icon {
+  transition: transform 180ms ease;
+}
+
+.step-title {
+  margin: 11px 0 3px;
+  color: var(--accent-red);
+  font-size: 15px;
+  line-height: 1.1;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
 .activity-audio {
   position: absolute;
   top: 89px;
@@ -434,7 +476,24 @@ body {
   transition: opacity 320ms ease, transform 320ms ease;
 }
 
+.activity-copy {
+  display: block;
+  margin: 0 auto;
+  max-width: 178px;
+  color: #4b4848;
+  font-size: 16px;
+  line-height: 1.2;
+  opacity: 0;
+  transform: translateY(5px);
+  transition: opacity 320ms ease, transform 320ms ease;
+}
+
 .steps.activities-visible .step-card p {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.steps.activities-visible .activity-copy {
   opacity: 1;
   transform: translateY(0);
 }
@@ -859,6 +918,177 @@ body {
   transform: rotate(38deg);
 }
 
+body.drawing-open {
+  overflow: hidden;
+}
+
+.drawing-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 14px;
+  padding: max(16px, env(safe-area-inset-top)) clamp(14px, 3vw, 28px) max(16px, env(safe-area-inset-bottom));
+  background:
+    linear-gradient(180deg, #65cbd8 0 0.75rem, transparent 0.75rem),
+    #efebe5;
+}
+
+.drawing-screen[hidden] {
+  display: none;
+}
+
+.drawing-topbar {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.drawing-topbar::after {
+  content: "";
+  width: 72px;
+}
+
+.drawing-close,
+.drawing-undo,
+.drawing-clear {
+  min-height: 42px;
+  padding: 9px 16px;
+  border: 0;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #246aa8;
+  font-family: "Comic Sans MS", "Trebuchet MS", "Arial Rounded MT Bold", Arial, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 6px 0 rgba(98, 198, 209, 0.23), 0 10px 18px rgba(36, 126, 174, 0.13);
+}
+
+.drawing-close:hover,
+.drawing-undo:hover,
+.drawing-clear:hover {
+  transform: translateY(-1px);
+}
+
+.drawing-close:active,
+.drawing-undo:active,
+.drawing-clear:active {
+  transform: translateY(1px);
+  box-shadow: 0 3px 0 rgba(98, 198, 209, 0.23), 0 7px 14px rgba(36, 126, 174, 0.12);
+}
+
+.drawing-undo:disabled {
+  cursor: default;
+  opacity: 0.48;
+  transform: none;
+}
+
+.drawing-close:focus-visible,
+.drawing-undo:focus-visible,
+.drawing-clear:focus-visible,
+.color-swatch:focus-visible,
+.brush-control input:focus-visible {
+  outline: 3px solid #f36b6f;
+  outline-offset: 4px;
+}
+
+.drawing-title {
+  min-width: 0;
+  text-align: center;
+}
+
+.drawing-title p {
+  margin: 0;
+  color: #e75d61;
+  font-family: "Comic Sans MS", "Trebuchet MS", "Arial Rounded MT Bold", Arial, sans-serif;
+  font-size: clamp(0.78rem, 1.6vw, 1rem);
+  font-weight: 900;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.drawing-title h2 {
+  margin: 2px 0 0;
+  color: #246aa8;
+  font-family: "Comic Sans MS", "Trebuchet MS", "Arial Rounded MT Bold", Arial, sans-serif;
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 0.95;
+}
+
+.drawing-board {
+  min-height: 0;
+  padding: clamp(8px, 1.5vw, 16px);
+  border-radius: 22px;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 6px rgba(98, 198, 209, 0.35), 0 14px 28px rgba(45, 134, 176, 0.16);
+}
+
+#drawingCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 260px;
+  border-radius: 16px;
+  background:
+    linear-gradient(90deg, rgba(98, 198, 209, 0.12) 1px, transparent 1px),
+    linear-gradient(rgba(98, 198, 209, 0.12) 1px, transparent 1px),
+    #fffdf8;
+  background-size: 30px 30px;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.drawing-tools {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(150px, 220px) auto;
+  align-items: center;
+  gap: 14px;
+}
+
+.color-tools,
+.drawing-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.color-tools {
+  flex-wrap: wrap;
+}
+
+.color-swatch {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 4px solid #ffffff;
+  border-radius: 50%;
+  background: var(--swatch);
+  cursor: pointer;
+  box-shadow: 0 6px 0 rgba(98, 198, 209, 0.18), 0 9px 16px rgba(36, 126, 174, 0.12);
+}
+
+.color-swatch.is-selected {
+  box-shadow: 0 0 0 4px #f6b33d, 0 6px 0 rgba(98, 198, 209, 0.18), 0 9px 16px rgba(36, 126, 174, 0.12);
+}
+
+.brush-control {
+  display: grid;
+  gap: 5px;
+  color: #246aa8;
+  font-family: "Comic Sans MS", "Trebuchet MS", "Arial Rounded MT Bold", Arial, sans-serif;
+  font-size: 0.86rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.brush-control input {
+  width: 100%;
+  accent-color: #f36b6f;
+}
+
 @media (max-width: 760px) {
   .hero-scene {
     height: min(58svh, 520px);
@@ -935,6 +1165,38 @@ body {
   .step-track {
     display: none;
   }
+
+  .drawing-screen {
+    gap: 10px;
+    padding-inline: 12px;
+  }
+
+  .drawing-topbar {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .drawing-topbar::after {
+    display: none;
+  }
+
+  .drawing-title {
+    text-align: right;
+  }
+
+  .drawing-tools {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .color-tools,
+  .drawing-actions {
+    justify-content: center;
+  }
+
+  .brush-control {
+    width: min(100%, 330px);
+    margin: 0 auto;
+  }
 }
 
 @media (max-width: 520px) {
@@ -978,7 +1240,18 @@ body {
     font-size: 14px;
   }
 
+  .step-title {
+    margin-top: 8px;
+    font-size: 14px;
+  }
+
   .step-card p {
+    max-width: 150px;
+    font-size: 12px;
+    line-height: 1.15;
+  }
+
+  .activity-copy {
     max-width: 150px;
     font-size: 12px;
     line-height: 1.15;
@@ -1034,6 +1307,30 @@ body {
     font-size: 0.92rem;
     line-height: 1.2;
   }
+
+  .drawing-board {
+    padding: 8px;
+    border-radius: 16px;
+  }
+
+  #drawingCanvas {
+    min-height: 220px;
+    border-radius: 12px;
+    background-size: 24px 24px;
+  }
+
+  .drawing-close,
+  .drawing-undo,
+  .drawing-clear {
+    min-height: 38px;
+    padding: 8px 13px;
+    font-size: 0.82rem;
+  }
+
+  .color-swatch {
+    width: 38px;
+    height: 38px;
+  }
 }
 
 @media (max-width: 390px) {
@@ -1050,7 +1347,16 @@ body {
     font-size: 13px;
   }
 
+  .step-title {
+    font-size: 13px;
+  }
+
   .step-card p {
+    max-width: 132px;
+    font-size: 11px;
+  }
+
+  .activity-copy {
     max-width: 132px;
     font-size: 11px;
   }
