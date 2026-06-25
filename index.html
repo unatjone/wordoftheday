@@ -51,7 +51,7 @@
       "inLanguage": "en"
     }
   </script>
-  <link rel="stylesheet" href="styles.css?v=20260625-no-birds" />
+  <link rel="stylesheet" href="styles.css?v=20260625-prompt-dot-arc" />
 </head>
 <body>
   <main class="page-shell" aria-label="Word of the Day">
@@ -59,9 +59,14 @@
       <img class="hero-image" src="word-of-the-day-kids-hero.webp" alt="Boy in red glasses with storybook friends" />
 
       <img class="brand-logo" src="word-of-the-day-logo.webp" alt="Word of the Day" />
-      <button class="word-prompt" type="button" aria-label="Show today's word">
-        Tap for today's word
-      </button>
+      <div class="word-prompt-stage">
+        <span class="word-prompt-dot word-prompt-dot-one" aria-hidden="true"></span>
+        <span class="word-prompt-dot word-prompt-dot-two" aria-hidden="true"></span>
+        <span class="word-prompt-dot word-prompt-dot-three" aria-hidden="true"></span>
+        <button class="word-prompt" type="button" aria-label="Show today's word">
+          Tap for today's word
+        </button>
+      </div>
       <div class="thought-layer" aria-live="polite"></div>
     </section>
 
@@ -158,6 +163,6 @@
 
   <script data-goatcounter="https://fun-word.goatcounter.com/count"
     async src="//gc.zgo.at/count.js"></script>
-  <script src="script.js?v=20260625-word-prompt-timer"></script>
+  <script src="script.js?v=20260625-prompt-sequence"></script>
 </body>
 </html>
