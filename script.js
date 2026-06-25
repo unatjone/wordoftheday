@@ -263,6 +263,14 @@ const wordRolloverHourUtc = 2;
 const activityRevealDelayAfterMainBubble = 0;
 const minimumRepeatGapDays = 50;
 const wordOrder = createShuffledWordOrder(Object.keys(wordActivities), 7282026);
+const drawingState = {
+  color: '#246aa8',
+  brushSize: 12,
+  isDrawing: false,
+  lastPoint: null,
+  history: [],
+  maxHistory: 18
+};
 
 if (wordOrder.length <= minimumRepeatGapDays) {
   console.warn('Add more words to keep the 50-day no-repeat rule working.');
@@ -404,6 +412,7 @@ function updateVisibleWord() {
   const content = document.querySelector('.thought-content');
 
   updateActivityStrip({ reveal: isActivityStripVisible() });
+  updateDrawingWord();
 
   if (!content) {
     return;
@@ -454,6 +463,303 @@ function updateActivityStrip({ reveal = false } = {}) {
 
   if (activityElements.steps) {
     activityElements.steps.classList.toggle('activities-visible', reveal);
+  }
+}
+
+function getDrawingElements() {
+  return {
+    screen: document.querySelector('.drawing-screen'),
+    canvas: document.getElementById('drawingCanvas'),
+    word: document.getElementById('drawingWord'),
+    close: document.querySelector('.drawing-close'),
+    swatches: document.querySelectorAll('.color-swatch'),
+    brush: document.getElementById('brushSize'),
+    undo: document.querySelector('.drawing-undo'),
+    clear: document.querySelector('.drawing-clear'),
+    open: document.querySelector('.draw-card-button')
+  };
+}
+
+function prepareDrawingContext(context) {
+  context.lineCap = 'round';
+  context.lineJoin = 'round';
+  context.strokeStyle = drawingState.color;
+  context.lineWidth = drawingState.brushSize;
+}
+
+function clearCanvas(context, canvas) {
+  context.save();
+  context.setTransform(1, 0, 0, 1, 0, 0);
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.restore();
+}
+
+function saveDrawingSnapshot({ replace = false } = {}) {
+  const { canvas, undo } = getDrawingElements();
+
+  if (!canvas) {
+    return;
+  }
+
+  const snapshot = canvas.toDataURL('image/png');
+
+  if (replace && drawingState.history.length) {
+    drawingState.history[drawingState.history.length - 1] = snapshot;
+  } else {
+    drawingState.history.push(snapshot);
+  }
+
+  if (drawingState.history.length > drawingState.maxHistory) {
+    drawingState.history.shift();
+  }
+
+  if (undo) {
+    undo.disabled = drawingState.history.length <= 1;
+  }
+}
+
+function restoreDrawingSnapshot(snapshot) {
+  const { canvas } = getDrawingElements();
+
+  if (!canvas || !snapshot) {
+    return;
+  }
+
+  const context = canvas.getContext('2d');
+  const image = new Image();
+
+  image.onload = () => {
+    clearCanvas(context, canvas);
+    context.drawImage(image, 0, 0, canvas.clientWidth, canvas.clientHeight);
+    prepareDrawingContext(context);
+  };
+
+  image.src = snapshot;
+}
+
+function resizeDrawingCanvas({ preserve = true } = {}) {
+  const { canvas } = getDrawingElements();
+
+  if (!canvas) {
+    return;
+  }
+
+  const rect = canvas.getBoundingClientRect();
+  const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+  const width = Math.max(1, Math.round(rect.width * pixelRatio));
+  const height = Math.max(1, Math.round(rect.height * pixelRatio));
+
+  if (canvas.width === width && canvas.height === height) {
+    prepareDrawingContext(canvas.getContext('2d'));
+    return;
+  }
+
+  const snapshot = preserve && canvas.width && canvas.height ? canvas.toDataURL('image/png') : null;
+  const context = canvas.getContext('2d');
+
+  canvas.width = width;
+  canvas.height = height;
+  context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+  prepareDrawingContext(context);
+
+  if (snapshot) {
+    const image = new Image();
+
+    image.onload = () => {
+      context.drawImage(image, 0, 0, canvas.clientWidth, canvas.clientHeight);
+      saveDrawingSnapshot({ replace: true });
+    };
+
+    image.src = snapshot;
+  } else if (!drawingState.history.length) {
+    saveDrawingSnapshot();
+  }
+}
+
+function getCanvasPoint(event, canvas) {
+  const rect = canvas.getBoundingClientRect();
+
+  return {
+    x: event.clientX - rect.left,
+    y: event.clientY - rect.top
+  };
+}
+
+function drawLineTo(point) {
+  const { canvas } = getDrawingElements();
+
+  if (!canvas || !drawingState.lastPoint) {
+    return;
+  }
+
+  const context = canvas.getContext('2d');
+
+  prepareDrawingContext(context);
+  context.beginPath();
+  context.moveTo(drawingState.lastPoint.x, drawingState.lastPoint.y);
+  context.lineTo(point.x, point.y);
+  context.stroke();
+  drawingState.lastPoint = point;
+}
+
+function drawDot(point) {
+  const { canvas } = getDrawingElements();
+
+  if (!canvas) {
+    return;
+  }
+
+  const context = canvas.getContext('2d');
+
+  prepareDrawingContext(context);
+  context.beginPath();
+  context.fillStyle = drawingState.color;
+  context.arc(point.x, point.y, drawingState.brushSize / 2, 0, Math.PI * 2);
+  context.fill();
+}
+
+function beginDrawing(event) {
+  const { canvas } = getDrawingElements();
+
+  if (!canvas || event.button > 0) {
+    return;
+  }
+
+  event.preventDefault();
+  resizeDrawingCanvas();
+  canvas.setPointerCapture?.(event.pointerId);
+  drawingState.isDrawing = true;
+  drawingState.lastPoint = getCanvasPoint(event, canvas);
+  drawDot(drawingState.lastPoint);
+}
+
+function continueDrawing(event) {
+  const { canvas } = getDrawingElements();
+
+  if (!canvas || !drawingState.isDrawing) {
+    return;
+  }
+
+  event.preventDefault();
+  drawLineTo(getCanvasPoint(event, canvas));
+}
+
+function finishDrawing(event) {
+  const { canvas } = getDrawingElements();
+
+  if (!canvas || !drawingState.isDrawing) {
+    return;
+  }
+
+  event.preventDefault();
+  drawingState.isDrawing = false;
+  drawingState.lastPoint = null;
+  canvas.releasePointerCapture?.(event.pointerId);
+  saveDrawingSnapshot();
+}
+
+function updateDrawingWord() {
+  const { word, open } = getDrawingElements();
+  const wordData = pickDailyWord();
+
+  if (word) {
+    word.textContent = wordData.word;
+  }
+
+  if (open) {
+    open.setAttribute('aria-label', `Open drawing board for ${wordData.word}`);
+  }
+}
+
+function openDrawingScreen() {
+  const { screen, close } = getDrawingElements();
+
+  if (!screen) {
+    return;
+  }
+
+  updateDrawingWord();
+  screen.hidden = false;
+  document.body.classList.add('drawing-open');
+
+  requestAnimationFrame(() => {
+    resizeDrawingCanvas();
+    close?.focus();
+  });
+}
+
+function closeDrawingScreen() {
+  const { screen, open } = getDrawingElements();
+
+  if (!screen) {
+    return;
+  }
+
+  screen.hidden = true;
+  document.body.classList.remove('drawing-open');
+  open?.focus();
+}
+
+function setupDrawingBoard() {
+  const { canvas, close, swatches, brush, undo, clear, open } = getDrawingElements();
+
+  if (!canvas) {
+    return;
+  }
+
+  canvas.addEventListener('pointerdown', beginDrawing);
+  canvas.addEventListener('pointermove', continueDrawing);
+  canvas.addEventListener('pointerup', finishDrawing);
+  canvas.addEventListener('pointercancel', finishDrawing);
+  canvas.addEventListener('pointerleave', finishDrawing);
+
+  open?.addEventListener('click', openDrawingScreen);
+  close?.addEventListener('click', closeDrawingScreen);
+
+  swatches.forEach((swatch) => {
+    swatch.addEventListener('click', () => {
+      drawingState.color = swatch.dataset.color || drawingState.color;
+      swatches.forEach((button) => button.classList.toggle('is-selected', button === swatch));
+      prepareDrawingContext(canvas.getContext('2d'));
+    });
+  });
+
+  brush?.addEventListener('input', () => {
+    drawingState.brushSize = Number(brush.value);
+    prepareDrawingContext(canvas.getContext('2d'));
+  });
+
+  undo?.addEventListener('click', () => {
+    if (drawingState.history.length <= 1) {
+      return;
+    }
+
+    drawingState.history.pop();
+    restoreDrawingSnapshot(drawingState.history[drawingState.history.length - 1]);
+    undo.disabled = drawingState.history.length <= 1;
+  });
+
+  clear?.addEventListener('click', () => {
+    clearCanvas(canvas.getContext('2d'), canvas);
+    saveDrawingSnapshot();
+  });
+
+  window.addEventListener('resize', () => {
+    if (!getDrawingElements().screen?.hidden) {
+      resizeDrawingCanvas();
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !getDrawingElements().screen?.hidden) {
+      closeDrawingScreen();
+    }
+  });
+
+  updateDrawingWord();
+
+  if (undo) {
+    undo.disabled = true;
   }
 }
 
@@ -519,5 +825,6 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  setupDrawingBoard();
   scheduleDailyWordRefresh();
 });
