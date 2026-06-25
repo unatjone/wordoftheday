@@ -1168,12 +1168,32 @@ body.drawing-open {
   }
 
   .word-prompt {
-    top: clamp(76px, 17vw, 110px);
-    left: 46%;
-    width: clamp(148px, 42vw, 190px);
-    min-height: 70px;
-    padding: 16px 22px 14px;
-    font-size: 0.66rem;
+    top: clamp(76px, 17vw, 108px);
+    left: 45%;
+    width: clamp(138px, 40vw, 176px);
+    min-height: 64px;
+    padding: 14px 20px 13px;
+    font-size: 0.62rem;
+  }
+
+  .word-prompt::before {
+    right: 14%;
+    bottom: -27px;
+    width: 21px;
+    height: 18px;
+    box-shadow:
+      -27px 28px 0 -5px #ffffff,
+      -38px 57px 0 -9px #ffffff;
+  }
+
+  .word-prompt::after {
+    box-shadow:
+      44px -6px 0 -14px #ffffff,
+      88px 6px 0 -18px #ffffff,
+      126px 23px 0 -25px #ffffff,
+      24px 54px 0 -21px #ffffff,
+      82px 58px 0 -20px #ffffff,
+      132px 46px 0 -28px #ffffff;
   }
 
   .steps {
