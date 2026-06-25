@@ -51,7 +51,7 @@
       "inLanguage": "en"
     }
   </script>
-  <link rel="stylesheet" href="styles.css?v=20260624-mobile-scroll" />
+  <link rel="stylesheet" href="styles.css?v=20260625-drawing-board" />
 </head>
 <body>
   <main class="page-shell" aria-label="Word of the Day">
@@ -106,21 +106,57 @@
         <p id="tryActivity">Use the word when you talk today.</p>
       </article>
 
-      <article class="step-card activity-card">
-        <div class="step-icon draw-icon" aria-hidden="true">
-          <span class="palette"></span>
-          <span class="paint paint-one"></span>
-          <span class="paint paint-two"></span>
-          <span class="crayon"></span>
-        </div>
-        <h2>Draw it</h2>
-        <p id="drawActivity">Draw something magical.</p>
+      <article class="step-card activity-card draw-card">
+        <button class="draw-card-button" type="button" aria-label="Open drawing board">
+          <span class="step-icon draw-icon" aria-hidden="true">
+            <span class="palette"></span>
+            <span class="paint paint-one"></span>
+            <span class="paint paint-two"></span>
+            <span class="crayon"></span>
+          </span>
+          <span class="step-title">Draw it</span>
+          <span class="activity-copy" id="drawActivity">Draw something magical.</span>
+        </button>
       </article>
+    </section>
+
+    <section class="drawing-screen" aria-label="Drawing board" hidden>
+      <div class="drawing-topbar">
+        <button class="drawing-close" type="button" aria-label="Go back to word activities">Back</button>
+        <div class="drawing-title">
+          <p>Draw today's word</p>
+          <h2 id="drawingWord">Magic</h2>
+        </div>
+      </div>
+
+      <div class="drawing-board">
+        <canvas id="drawingCanvas" aria-label="Drawing canvas"></canvas>
+      </div>
+
+      <div class="drawing-tools" aria-label="Drawing tools">
+        <div class="color-tools" aria-label="Choose a color">
+          <button class="color-swatch is-selected" type="button" data-color="#246aa8" aria-label="Blue color" style="--swatch: #246aa8"></button>
+          <button class="color-swatch" type="button" data-color="#f36b6f" aria-label="Red color" style="--swatch: #f36b6f"></button>
+          <button class="color-swatch" type="button" data-color="#f6b33d" aria-label="Yellow color" style="--swatch: #f6b33d"></button>
+          <button class="color-swatch" type="button" data-color="#62c6d1" aria-label="Teal color" style="--swatch: #62c6d1"></button>
+          <button class="color-swatch" type="button" data-color="#333333" aria-label="Black color" style="--swatch: #333333"></button>
+        </div>
+
+        <label class="brush-control" for="brushSize">
+          Brush
+          <input id="brushSize" type="range" min="4" max="28" value="12" />
+        </label>
+
+        <div class="drawing-actions">
+          <button class="drawing-undo" type="button">Undo</button>
+          <button class="drawing-clear" type="button">Clear</button>
+        </div>
+      </div>
     </section>
   </main>
 
   <script data-goatcounter="https://fun-word.goatcounter.com/count"
     async src="//gc.zgo.at/count.js"></script>
-  <script src="script.js?v=20260624-speaker-icon"></script>
+  <script src="script.js?v=20260625-drawing-board"></script>
 </body>
 </html>
