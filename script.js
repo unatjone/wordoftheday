@@ -259,12 +259,14 @@ const bubbleSteps = [
 
 let bubbleTimers = [];
 let activityRevealTimer;
+let activityPulseTimers = [];
 let drawPromptTimer;
 let wordPromptHideTimer;
 const wordRolloverHourUtc = 2;
 const activityRevealDelayAfterMainBubble = 0;
+const activityPulseDelaysAfterMainBubble = [3000, 8000, 13000];
 const wordPromptHideDelay = 10000;
-const drawPromptDelay = 30000;
+const drawPromptDelayAfterMainBubble = 23000;
 const minimumRepeatGapDays = 50;
 const wordOrder = createShuffledWordOrder(Object.keys(wordActivities), 7282026);
 const drawingState = {
@@ -335,9 +337,14 @@ function getMsUntilNextWordRollover() {
 
 function setWordPromptVisible(isVisible) {
   const prompt = document.querySelector('.word-prompt');
+  const promptStage = document.querySelector('.word-prompt-stage');
 
   if (prompt) {
     prompt.hidden = !isVisible;
+  }
+
+  if (promptStage) {
+    promptStage.hidden = !isVisible;
   }
 }
 
@@ -388,6 +395,9 @@ function clearThoughtBubbles(layer) {
   bubbleTimers.forEach((timer) => clearTimeout(timer));
   bubbleTimers = [];
   clearTimeout(activityRevealTimer);
+  clearActivityPulseTimers();
+  clearTimeout(drawPromptTimer);
+  setDrawPromptVisible(false);
   hideActivityStrip();
   layer.closest('.hero-scene')?.classList.remove('word-active');
   setWordPromptVisible(true);
@@ -459,6 +469,38 @@ function hideActivityStrip() {
   }
 }
 
+function clearActivityPulseTimers() {
+  activityPulseTimers.forEach((timer) => clearTimeout(timer));
+  activityPulseTimers = [];
+  document.querySelectorAll('.step-card.is-pulsing').forEach((card) => {
+    card.classList.remove('is-pulsing');
+  });
+}
+
+function pulseActivityCard(card) {
+  if (!card) {
+    return;
+  }
+
+  card.classList.remove('is-pulsing');
+  void card.offsetWidth;
+  card.classList.add('is-pulsing');
+}
+
+function scheduleActivityPulses(startDelay = 0) {
+  const cards = Array.from(document.querySelectorAll('.activity-card')).slice(0, 3);
+
+  clearActivityPulseTimers();
+
+  cards.forEach((card, index) => {
+    const timer = setTimeout(() => {
+      pulseActivityCard(card);
+    }, startDelay + activityPulseDelaysAfterMainBubble[index]);
+
+    activityPulseTimers.push(timer);
+  });
+}
+
 function updateActivityStrip({ reveal = false } = {}) {
   const wordData = pickDailyWord();
   const activityElements = getActivityElements();
@@ -501,7 +543,7 @@ function setDrawPromptVisible(isVisible) {
   }
 }
 
-function scheduleDrawPrompt() {
+function scheduleDrawPrompt(startDelay = 0) {
   clearTimeout(drawPromptTimer);
 
   drawPromptTimer = setTimeout(() => {
@@ -510,7 +552,7 @@ function scheduleDrawPrompt() {
     if (!screen || screen.hidden) {
       setDrawPromptVisible(true);
     }
-  }, drawPromptDelay);
+  }, startDelay + drawPromptDelayAfterMainBubble);
 }
 
 function prepareDrawingContext(context) {
@@ -792,7 +834,7 @@ function setupDrawingBoard() {
   });
 
   updateDrawingWord();
-  scheduleDrawPrompt();
+  setDrawPromptVisible(false);
 
   if (undo) {
     undo.disabled = true;
@@ -827,6 +869,9 @@ function showThoughtSequence() {
   activityRevealTimer = setTimeout(() => {
     updateActivityStrip({ reveal: true });
   }, revealDelay);
+
+  scheduleActivityPulses(revealDelay);
+  scheduleDrawPrompt(revealDelay);
 }
 
 function scheduleDailyWordRefresh() {
