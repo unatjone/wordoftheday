@@ -383,15 +383,17 @@ body {
   position: relative;
   z-index: 10;
   display: grid;
-  grid-template-columns: repeat(4, minmax(150px, 190px));
+  grid-template-columns: repeat(4, minmax(168px, 210px));
   justify-content: center;
-  column-gap: 36px;
-  align-items: start;
-  min-height: 206px;
+  column-gap: 24px;
+  align-items: stretch;
+  min-height: 244px;
   margin-top: 0;
-  padding: 18px 24px 40px;
+  padding: 28px 24px 42px;
   background: var(--cream);
-  box-shadow: inset 0 10px 0 rgba(222, 216, 207, 0.55);
+  box-shadow:
+    inset 0 10px 0 rgba(222, 216, 207, 0.55),
+    inset 0 34px 0 rgba(255, 255, 255, 0.16);
 }
 
 .steps > .step-card {
@@ -401,11 +403,11 @@ body {
 .step-track {
   position: absolute;
   z-index: 1;
-  top: 48px;
-  left: max(92px, calc(50% - 275px));
-  width: min(50vw, 545px);
+  top: 70px;
+  left: max(92px, calc(50% - 310px));
+  width: min(54vw, 620px);
   height: 42px;
-  border-top: 3px dotted rgba(205, 205, 199, 0.95);
+  border-top: 4px dotted rgba(98, 198, 209, 0.34);
   border-radius: 50%;
   transform: rotate(1deg);
 }
@@ -417,15 +419,25 @@ body {
   flex-direction: column;
   align-items: center;
   min-width: 0;
+  height: 100%;
+  min-height: 174px;
+  padding: 18px 14px 16px;
+  border-radius: 22px 18px 24px 18px / 20px 24px 18px 22px;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow:
+    0 8px 0 rgba(98, 198, 209, 0.14),
+    0 16px 28px rgba(36, 126, 174, 0.09);
   text-align: center;
 }
 
 .step-card h2 {
-  margin: 11px 0 3px;
+  margin: 13px 0 5px;
   color: var(--accent-red);
-  font-size: 15px;
+  font-family: "Comic Sans MS", "Trebuchet MS", "Arial Rounded MT Bold", Arial, sans-serif;
+  font-size: 16px;
   line-height: 1.1;
-  font-weight: 800;
+  font-weight: 900;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
 }
 
@@ -436,6 +448,7 @@ body {
   align-items: center;
   width: 100%;
   min-height: 100%;
+  flex: 1;
   padding: 0;
   border: 0;
   background: transparent;
@@ -493,11 +506,11 @@ body {
 }
 
 .draw-card-button:hover .draw-icon {
-  transform: translateY(-2px) rotate(-2deg);
+  transform: scale(1.08) translateY(-2px) rotate(-2deg);
 }
 
 .draw-card-button:active .draw-icon {
-  transform: translateY(1px);
+  transform: scale(1.08) translateY(1px);
 }
 
 .draw-card-button .draw-icon {
@@ -505,20 +518,22 @@ body {
 }
 
 .step-title {
-  margin: 11px 0 3px;
+  margin: 13px 0 5px;
   color: var(--accent-red);
-  font-size: 15px;
+  font-family: "Comic Sans MS", "Trebuchet MS", "Arial Rounded MT Bold", Arial, sans-serif;
+  font-size: 16px;
   line-height: 1.1;
-  font-weight: 800;
+  font-weight: 900;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
 }
 
 .activity-audio {
   position: absolute;
-  top: 89px;
-  left: calc(50% + 34px);
-  width: 30px;
-  height: 30px;
+  top: 101px;
+  left: calc(50% + 38px);
+  width: 34px;
+  height: 34px;
   margin: 0;
   opacity: 0;
   transform: translateY(5px);
@@ -527,16 +542,18 @@ body {
 }
 
 .activity-audio .audio-icon {
-  width: 19px;
-  height: 19px;
+  width: 21px;
+  height: 21px;
 }
 
 .step-card p {
   margin: 0 auto;
-  max-width: 178px;
-  color: #4b4848;
-  font-size: 16px;
+  max-width: 182px;
+  color: #3f3c3c;
+  font-family: "Trebuchet MS", "Comic Sans MS", Arial, sans-serif;
+  font-size: 17px;
   line-height: 1.2;
+  font-weight: 500;
   opacity: 0;
   transform: translateY(5px);
   transition: opacity 320ms ease, transform 320ms ease;
@@ -545,10 +562,12 @@ body {
 .activity-copy {
   display: block;
   margin: 0 auto;
-  max-width: 178px;
-  color: #4b4848;
-  font-size: 16px;
+  max-width: 182px;
+  color: #3f3c3c;
+  font-family: "Trebuchet MS", "Comic Sans MS", Arial, sans-serif;
+  font-size: 17px;
   line-height: 1.2;
+  font-weight: 500;
   opacity: 0;
   transform: translateY(5px);
   transition: opacity 320ms ease, transform 320ms ease;
@@ -572,43 +591,37 @@ body {
 
 .step-icon {
   position: relative;
-  width: 90px;
-  height: 79px;
+  width: 100px;
+  height: 88px;
   margin: 0 auto;
+  transform: scale(1.08);
+  transform-origin: center top;
 }
 
 .say-icon .speech {
   position: absolute;
-  left: 12px;
-  top: 12px;
+  left: 15px;
+  top: 9px;
   width: 56px;
-  height: 42px;
-  border-radius: 26px;
+  height: 56px;
+  border: 5px solid #62c6d1;
+  border-radius: 50%;
   background: #ffffff;
-  box-shadow: inset 0 0 0 4px #62c6d1;
+  box-shadow: 0 8px 0 rgba(70, 174, 199, 0.14);
 }
 
 .say-icon .speech::after {
-  content: "";
-  position: absolute;
-  right: 8px;
-  bottom: -9px;
-  width: 18px;
-  height: 18px;
-  background: #ffffff;
-  border-right: 4px solid #62c6d1;
-  border-bottom: 4px solid #62c6d1;
-  transform: rotate(35deg);
+  display: none;
 }
 
 .say-icon .speech::before {
   content: "Aa";
   position: absolute;
-  left: 14px;
-  top: 10px;
+  left: 12px;
+  top: 13px;
   color: #2d70aa;
   font-family: "Comic Sans MS", "Trebuchet MS", Arial, sans-serif;
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 900;
 }
 
@@ -621,15 +634,15 @@ body {
 }
 
 .say-icon .sound-one {
-  right: 8px;
-  top: 23px;
+  right: 10px;
+  top: 29px;
   width: 15px;
   height: 15px;
 }
 
 .say-icon .sound-two {
-  right: 2px;
-  top: 15px;
+  right: 3px;
+  top: 21px;
   width: 28px;
   height: 28px;
 }
@@ -1198,10 +1211,21 @@ body.drawing-open {
 
   .steps {
     grid-template-columns: repeat(2, minmax(130px, 1fr));
-    row-gap: 26px;
+    column-gap: 18px;
+    row-gap: 24px;
     min-height: auto;
-    padding: 38px 22px 28px;
-    align-items: start;
+    padding: 34px 22px 34px;
+    align-items: stretch;
+  }
+
+  .step-card {
+    min-height: 168px;
+    padding: 16px 12px 15px;
+  }
+
+  .activity-audio {
+    top: 96px;
+    left: calc(50% + 36px);
   }
 
   .thought-dot-one {
@@ -1315,9 +1339,18 @@ body.drawing-open {
   .steps {
     grid-template-columns: 1fr 1fr;
     column-gap: 12px;
-    row-gap: 24px;
-    padding: 34px 16px max(24px, env(safe-area-inset-bottom));
+    row-gap: 18px;
+    padding: 28px 14px max(24px, env(safe-area-inset-bottom));
     box-shadow: inset 0 7px 0 rgba(222, 216, 207, 0.55);
+  }
+
+  .step-card {
+    min-height: 156px;
+    padding: 13px 8px 14px;
+    border-radius: 18px 15px 20px 15px / 16px 20px 15px 18px;
+    box-shadow:
+      0 6px 0 rgba(98, 198, 209, 0.14),
+      0 12px 20px rgba(36, 126, 174, 0.08);
   }
 
   .step-icon {
@@ -1338,14 +1371,21 @@ body.drawing-open {
 
   .step-card p {
     max-width: 150px;
-    font-size: 12px;
-    line-height: 1.15;
+    font-size: 13px;
+    line-height: 1.16;
   }
 
   .activity-copy {
     max-width: 150px;
-    font-size: 12px;
-    line-height: 1.15;
+    font-size: 13px;
+    line-height: 1.16;
+  }
+
+  .activity-audio {
+    top: 86px;
+    left: calc(50% + 32px);
+    width: 31px;
+    height: 31px;
   }
 
   .draw-tap-prompt {
@@ -1437,7 +1477,12 @@ body.drawing-open {
   }
 
   .steps {
-    padding-top: 28px;
+    padding-top: 24px;
+  }
+
+  .step-card {
+    min-height: 150px;
+    padding-inline: 6px;
   }
 
   .step-card h2 {
@@ -1450,11 +1495,11 @@ body.drawing-open {
 
   .step-card p {
     max-width: 132px;
-    font-size: 11px;
+    font-size: 12px;
   }
 
   .activity-copy {
     max-width: 132px;
-    font-size: 11px;
+    font-size: 12px;
   }
 }
