@@ -1242,7 +1242,7 @@ body.drawing-open {
   }
 
   .word-prompt-stage {
-    top: clamp(58px, 14vw, 88px);
+    top: clamp(48px, 12vw, 76px);
     left: 45%;
   }
 
@@ -1305,22 +1305,22 @@ body.drawing-open {
 
   .thought-dot-one {
     left: 40%;
-    top: 52%;
+    top: 49%;
   }
 
   .thought-dot-two {
     left: 34%;
-    top: 38%;
+    top: 35%;
   }
 
   .thought-dot-three {
     left: 25%;
-    top: 23%;
+    top: 20%;
   }
 
   .thought-main {
     left: 7%;
-    top: 4%;
+    top: 2%;
     width: 88%;
     min-height: 166px;
     padding: 36px 32px 34px;
@@ -1412,7 +1412,7 @@ body.drawing-open {
   }
 
   .word-prompt-stage {
-    top: clamp(52px, 13vw, 78px);
+    top: clamp(44px, 11vw, 68px);
   }
 
   .steps {
@@ -1478,26 +1478,26 @@ body.drawing-open {
   }
 
   .thought-dot-one {
-    top: 48%;
+    top: 45%;
     width: 30px;
     height: 30px;
   }
 
   .thought-dot-two {
-    top: 35%;
+    top: 32%;
     width: 58px;
     height: 44px;
   }
 
   .thought-dot-three {
-    top: 20%;
+    top: 17%;
     width: 86px;
     height: 60px;
   }
 
   .thought-main {
     left: 8%;
-    top: 3%;
+    top: 1%;
     width: 84%;
     min-height: 148px;
     padding: 31px 24px 28px;
@@ -1572,15 +1572,15 @@ body.drawing-open {
   }
 
   .thought-dot-one {
-    top: 47%;
+    top: 44%;
   }
 
   .thought-dot-two {
-    top: 34%;
+    top: 31%;
   }
 
   .thought-dot-three {
-    top: 19%;
+    top: 16%;
   }
 
   .step-card {
