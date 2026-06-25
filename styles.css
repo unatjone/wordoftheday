@@ -1403,8 +1403,8 @@ body.drawing-open {
   }
 
   .hero-scene {
-    height: min(46svh, 380px);
-    min-height: 292px;
+    height: min(53svh, 430px);
+    min-height: 330px;
   }
 
   .hero-image {
@@ -1548,8 +1548,8 @@ body.drawing-open {
 
 @media (max-width: 390px) {
   .hero-scene {
-    height: min(44svh, 350px);
-    min-height: 278px;
+    height: min(51svh, 400px);
+    min-height: 318px;
   }
 
   .steps {
