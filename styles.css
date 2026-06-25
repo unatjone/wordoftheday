@@ -1403,8 +1403,8 @@ body.drawing-open {
   }
 
   .hero-scene {
-    height: min(46svh, 380px);
-    min-height: 292px;
+    height: min(52svh, 430px);
+    min-height: 328px;
   }
 
   .hero-image {
@@ -1418,17 +1418,17 @@ body.drawing-open {
   .steps {
     grid-template-columns: 1fr 1fr;
     column-gap: 10px;
-    row-gap: 12px;
-    grid-auto-rows: minmax(132px, 1fr);
+    row-gap: 10px;
+    grid-auto-rows: minmax(112px, 1fr);
     align-content: stretch;
-    min-height: calc(100svh - min(46svh, 380px));
-    padding: 18px 12px max(18px, env(safe-area-inset-bottom));
+    min-height: calc(100svh - min(52svh, 430px));
+    padding: 12px 10px max(12px, env(safe-area-inset-bottom));
     box-shadow: inset 0 7px 0 rgba(222, 216, 207, 0.55);
   }
 
   .step-card {
-    min-height: 132px;
-    padding: 9px 7px 10px;
+    min-height: 112px;
+    padding: 7px 6px 8px;
     border-radius: 18px 15px 20px 15px / 16px 20px 15px 18px;
     box-shadow:
       0 6px 0 rgba(98, 198, 209, 0.14),
@@ -1436,39 +1436,39 @@ body.drawing-open {
   }
 
   .step-icon {
-    flex: 0 0 65px;
-    width: 82px;
-    height: 70px;
-    transform: scale(0.86);
+    flex: 0 0 52px;
+    width: 76px;
+    height: 62px;
+    transform: scale(0.75);
   }
 
   .step-card h2 {
-    margin: 3px 0 3px;
-    font-size: 12px;
+    margin: 0 0 3px;
+    font-size: 11px;
   }
 
   .step-title {
-    margin: 3px 0 3px;
-    font-size: 12px;
+    margin: 0 0 3px;
+    font-size: 11px;
   }
 
   .step-card p {
-    max-width: 140px;
-    font-size: 12px;
-    line-height: 1.12;
+    max-width: 128px;
+    font-size: 10.5px;
+    line-height: 1.1;
   }
 
   .activity-copy {
-    max-width: 140px;
-    font-size: 12px;
-    line-height: 1.12;
+    max-width: 128px;
+    font-size: 10.5px;
+    line-height: 1.1;
   }
 
   .activity-audio {
-    top: 64px;
-    left: calc(50% + 27px);
-    width: 28px;
-    height: 28px;
+    top: 54px;
+    left: calc(50% + 23px);
+    width: 25px;
+    height: 25px;
   }
 
   .draw-tap-prompt {
@@ -1478,26 +1478,26 @@ body.drawing-open {
   }
 
   .thought-dot-one {
-    top: 45%;
+    top: 39%;
     width: 30px;
     height: 30px;
   }
 
   .thought-dot-two {
-    top: 32%;
+    top: 27%;
     width: 58px;
     height: 44px;
   }
 
   .thought-dot-three {
-    top: 17%;
+    top: 13%;
     width: 86px;
     height: 60px;
   }
 
   .thought-main {
     left: 8%;
-    top: 1%;
+    top: 0;
     width: 84%;
     min-height: 148px;
     padding: 31px 24px 28px;
@@ -1558,13 +1558,13 @@ body.drawing-open {
 
 @media (max-width: 390px) {
   .hero-scene {
-    height: min(44svh, 350px);
-    min-height: 278px;
+    height: min(50svh, 400px);
+    min-height: 312px;
   }
 
   .steps {
-    grid-auto-rows: minmax(126px, 1fr);
-    min-height: calc(100svh - min(44svh, 350px));
+    grid-auto-rows: minmax(108px, 1fr);
+    min-height: calc(100svh - min(50svh, 400px));
   }
 
   .steps {
@@ -1572,19 +1572,19 @@ body.drawing-open {
   }
 
   .thought-dot-one {
-    top: 44%;
+    top: 38%;
   }
 
   .thought-dot-two {
-    top: 31%;
+    top: 26%;
   }
 
   .thought-dot-three {
-    top: 16%;
+    top: 12%;
   }
 
   .step-card {
-    min-height: 126px;
+    min-height: 108px;
     padding-inline: 6px;
   }
 
